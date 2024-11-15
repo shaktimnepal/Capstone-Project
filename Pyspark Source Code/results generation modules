@@ -1,0 +1,23 @@
+# Use Case 1: Count the Total Number of Rejected Claims
+
+# Filter for rejected claims which was denoted as "N" in the claims table and count the total number of "N"s. 
+rejected_claims = df_claims.filter(df_claims["Claim_Or_Rejected"] == "N")
+rejected_claims_count = rejected_claims.count()# Use Case 2: Determine the Disease with the Maximum Number of Claims
+
+# Print the total number of rejected claims 
+
+print(f"Total number of rejected claims: {rejected_claims_count}")
+
+#Write the rejected_claims dataFrame into Amazon S3
+rejected_claims.write.parquet("s3://shaktim-bootcamp/Project-Output/all-rejected-claims")
+
+# Use Case 2: Determine the Disease with the Maximum Number of Claims
+
+# Group by disease_name and count claims, then get all the diseases with max claims
+max_claims_disease = (df_claims.groupBy("disease_name")
+                      .agg(count("claim_id").alias("claim_count"))
+                      .orderBy(col("claim_count").desc())
+                      .limit(5))
+
+#Write the max_claims_disease dataFrame into Amazon S3
+max_claims_disease.write.parquet("s3://shaktim-bootcamp/Project-Output/max-claims-disease")
