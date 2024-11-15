@@ -1,1 +1,51 @@
+# Use Case 1: Count the Total Number of Rejected Claims
 
+#Set S3 access credentials for the spark session
+spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.access.key", "myaccesskey")
+spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.secret.key", "mysecretkey")
+
+# Load the claims table from S3
+df_claims = spark.read.json("s3://shaktim-bootcamp/input-data/claims.json")
+
+#Remove duplicates
+df_claims = df_claims.dropDuplicates()
+
+# Replace null values with "NA"
+df_claims = df_claims.fillna({
+    "Claim_Or_Rejected": "NA",
+    "SUB_ID": "NA",
+    "claim_amount": "NA",
+    "claim_date": "NA",
+    "claim_id": "NA",
+    "claim_type": "NA",
+    "disease_name": "NA",
+    "patient_id": "NA"   
+})
+
+
+# Use Case 2: Determine the Disease with the Maximum Number of Claims
+
+#Set S3 access credentials for the spark session
+spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.access.key", "myaccesskey")
+spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.secret.key", "mysecretkey")
+
+# import necessary functions
+from pyspark.sql.functions import count, col
+
+# Load the claims table from S3
+df_claims = spark.read.json("s3://shaktim-bootcamp/input-data/claims.json")
+
+#Remove duplicates
+df_claims = df_claims.dropDuplicates()
+
+# Replace null values with "NA"
+df_claims = df_claims.fillna({
+    "Claim_Or_Rejected": "NA",
+    "SUB_ID": "NA",
+    "claim_amount": "NA",
+    "claim_date": "NA",
+    "claim_id": "NA",
+    "claim_type": "NA",
+    "disease_name": "NA",
+    "patient_id": "NA"   
+})
